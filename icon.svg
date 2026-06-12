@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#0d1e2e"/>
+      <stop offset="100%" stop-color="#060a0d"/>
+    </radialGradient>
+
+    <!-- Cyan glow gradient for hexagon -->
+    <linearGradient id="hexStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="50%" stop-color="#00b8d4"/>
+      <stop offset="100%" stop-color="#0097a7"/>
+    </linearGradient>
+
+    <!-- Diamond fill gradient -->
+    <linearGradient id="diamondFill" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="40%" stop-color="#00c8e0"/>
+      <stop offset="100%" stop-color="#0077aa"/>
+    </linearGradient>
+
+    <!-- Diamond shine -->
+    <linearGradient id="diamondShine" x1="0%" y1="0%" x2="60%" y2="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Outer glow filter -->
+    <filter id="glowOuter" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle inner shadow -->
+    <filter id="innerShadow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <!-- Clip to rounded square for maskable icon -->
+    <clipPath id="roundedSquare">
+      <rect width="512" height="512" rx="96" ry="96"/>
+    </clipPath>
+  </defs>
+
+  <!-- Maskable background (rounded square) -->
+  <g clip-path="url(#roundedSquare)">
+
+    <!-- BG -->
+    <rect width="512" height="512" fill="url(#bgGrad)"/>
+
+    <!-- Subtle grid lines -->
+    <g opacity="0.06" stroke="#00e5ff" stroke-width="1">
+      <line x1="0" y1="128" x2="512" y2="128"/>
+      <line x1="0" y1="256" x2="512" y2="256"/>
+      <line x1="0" y1="384" x2="512" y2="384"/>
+      <line x1="128" y1="0" x2="128" y2="512"/>
+      <line x1="256" y1="0" x2="256" y2="512"/>
+      <line x1="384" y1="0" x2="384" y2="512"/>
+    </g>
+
+    <!-- Outer hex ring (glow) -->
+    <polygon
+      points="256,52 432,154 432,358 256,460 80,358 80,154"
+      fill="none"
+      stroke="url(#hexStroke)"
+      stroke-width="3"
+      opacity="0.35"
+      filter="url(#glowOuter)"
+    />
+
+    <!-- Mid hex ring -->
+    <polygon
+      points="256,80 408,168 408,344 256,432 104,344 104,168"
+      fill="none"
+      stroke="url(#hexStroke)"
+      stroke-width="1.5"
+      opacity="0.2"
+    />
+
+    <!-- Inner hex fill (dark tinted) -->
+    <polygon
+      points="256,108 384,180 384,326 256,398 128,326 128,180"
+      fill="#00e5ff"
+      opacity="0.04"
+    />
+
+    <!-- ══ DIAMOND SHAPE ══ -->
+    <!-- Main diamond body -->
+    <polygon
+      points="256,130 360,240 256,370 152,240"
+      fill="url(#diamondFill)"
+      filter="url(#glowOuter)"
+    />
+
+    <!-- Diamond top facet (shine) -->
+    <polygon
+      points="256,130 320,210 256,210 192,210"
+      fill="url(#diamondShine)"
+      opacity="0.6"
+    />
+
+    <!-- Diamond left facet (mid tone) -->
+    <polygon
+      points="152,240 256,210 256,370"
+      fill="#005577"
+      opacity="0.45"
+    />
+
+    <!-- Diamond right facet (dark) -->
+    <polygon
+      points="360,240 256,210 256,370"
+      fill="#003344"
+      opacity="0.4"
+    />
+
+    <!-- Diamond center crease line -->
+    <line x1="256" y1="130" x2="256" y2="370" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
+    <line x1="152" y1="240" x2="360" y2="240" stroke="#00e5ff" stroke-width="1" opacity="0.2"/>
+
+    <!-- Inner diamond sparkle (small top-left) -->
+    <polygon
+      points="256,148 274,210 256,210 238,210"
+      fill="#ffffff"
+      opacity="0.18"
+    />
+
+    <!-- ══ "FF" TEXT ══ -->
+    <text
+      x="256"
+      y="468"
+      text-anchor="middle"
+      font-family="'Rajdhani', 'Arial Black', sans-serif"
+      font-size="48"
+      font-weight="700"
+      fill="#00e5ff"
+      letter-spacing="6"
+      opacity="0.9"
+    >FF HUB</text>
+
+    <!-- Cyan bottom glow bar -->
+    <rect x="156" y="488" width="200" height="3" rx="2" fill="#00e5ff" opacity="0.5"/>
+
+    <!-- Corner accent dots -->
+    <circle cx="96"  cy="96"  r="4" fill="#00e5ff" opacity="0.3"/>
+    <circle cx="416" cy="96"  r="4" fill="#00e5ff" opacity="0.3"/>
+    <circle cx="96"  cy="416" r="4" fill="#00e5ff" opacity="0.3"/>
+    <circle cx="416" cy="416" r="4" fill="#00e5ff" opacity="0.3"/>
+
+  </g>
+</svg>

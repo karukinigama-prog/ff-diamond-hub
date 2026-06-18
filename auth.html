@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — FF Diamond Hub</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#00e5ff"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    .auth-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 18px;
+    }
+    .auth-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 420px;
+    }
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .auth-logo .brand-name {
+      font-size: 26px;
+    }
+    .auth-tabs {
+      display: flex;
+      background: var(--bg-card-2);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 28px;
+      gap: 4px;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: var(--transition);
+      border: none;
+      background: none;
+      font-family: var(--font-body);
+    }
+    .auth-tab.active {
+      background: var(--bg-card);
+      color: var(--cyan);
+      border: 1px solid var(--border-glow);
+    }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .auth-divider {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-dim);
+      margin: 20px 0 4px;
+    }
+    .auth-divider span {
+      color: var(--cyan);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .back-home {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-home a {
+      font-size: 13px;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .back-home a:hover { color: var(--cyan); }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="logo-icon">
+        <svg viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="none" stroke="#00e5ff" stroke-width="1.5"/>
+          <text x="16" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#00e5ff" font-family="Rajdhani">FF</text>
+        </svg>
+      </div>
+      <span class="brand-name">FF Diamond<span class="brand-accent">Hub</span></span>
+    </a>
+  </div>
+</nav>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <p style="color:var(--text-muted);font-size:14px;">Welcome to</p>
+      <span class="brand-name" style="font-size:24px">FF Diamond<span class="brand-accent">Hub</span></span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="auth-form active" id="form-login">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="login-email" class="form-input" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="login-password" class="form-input" placeholder="••••••••"/>
+      </div>
+      <button class="btn-confirm" onclick="handleLogin()" style="margin-top:8px">
+        <span class="btn-confirm-text" id="login-btn-text">Login</span>
+        <span class="btn-confirm-arrow">→</span>
+      </button>
+      <div class="auth-divider">
+        Don't have an account? <span onclick="switchTab('register')">Register here</span>
+      </div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="auth-form" id="form-register">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" id="reg-name" class="form-input" placeholder="Your name"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="reg-email" class="form-input" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">WhatsApp Number</label>
+        <input type="tel" id="reg-whatsapp" class="form-input" placeholder="07X XXXXXXX"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="reg-password" class="form-input" placeholder="Min 6 characters"/>
+      </div>
+      <button class="btn-confirm" onclick="handleRegister()" style="margin-top:8px">
+        <span class="btn-confirm-text" id="reg-btn-text">Create Account</span>
+        <span class="btn-confirm-arrow">→</span>
+      </button>
+      <div class="auth-divider">
+        Already have an account? <span onclick="switchTab('login')">Login here</span>
+      </div>
+    </div>
+
+    <div class="back-home">
+      <a href="index.html">← Back to Home</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+  // Switch between login/register tabs
+  function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    document.getElementById(`tab-${tab}`).classList.add('active');
+    document.getElementById(`form-${tab}`).classList.add('active');
+  }
+
+  // Handle Login
+  async function handleLogin() {
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const btnText  = document.getElementById('login-btn-text');
+
+    if (!email || !password) {
+      showToast('Please fill all fields', 'error'); return;
+    }
+
+    btnText.textContent = 'Logging in...';
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      showToast('❌ ' + error.message, 'error');
+      btnText.textContent = 'Login';
+    } else {
+      showToast('✅ Welcome back!', 'success');
+      setTimeout(() => window.location.href = 'index.html', 1000);
+    }
+  }
+
+  // Handle Register
+  async function handleRegister() {
+    const name      = document.getElementById('reg-name').value.trim();
+    const email     = document.getElementById('reg-email').value.trim();
+    const whatsapp  = document.getElementById('reg-whatsapp').value.trim();
+    const password  = document.getElementById('reg-password').value;
+    const btnText   = document.getElementById('reg-btn-text');
+
+    if (!name || !email || !whatsapp || !password) {
+      showToast('Please fill all fields', 'error'); return;
+    }
+    if (password.length < 6) {
+      showToast('Password must be at least 6 characters', 'error'); return;
+    }
+
+    btnText.textContent = 'Creating account...';
+
+    const { data, error } = await supabase.auth.signUp({
+      email, password,
+      options: { data: { name, whatsapp } }
+    });
+
+    if (error) {
+      showToast('❌ ' + error.message, 'error');
+      btnText.textContent = 'Create Account';
+    } else {
+      showToast('✅ Account created! Please login.', 'success');
+      setTimeout(() => switchTab('login'), 1500);
+      btnText.textContent = 'Create Account';
+    }
+  }
+
+  // Toast
+  let toastTimer;
+  function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    if (toastTimer) clearTimeout(toastTimer);
+    toast.textContent = msg;
+    toast.className = `toast ${type} show`;
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  // If already logged in redirect
+  supabase.auth.getSession().then(({ data }) => {
+    if (data.session) window.location.href = 'index.html';
+  });
+</script>
+</body>
+</html>

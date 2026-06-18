@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FF Diamond Hub — Fast. Cheap. Trusted.</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#00e5ff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FF Hub" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    .wallet-bar {
+      background: linear-gradient(135deg,#0a1a20,#0d1520);
+      border: 1px solid var(--border-glow);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .wallet-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .wallet-amount { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--cyan); }
+    .nav-user-name { font-size: 13px; color: var(--cyan); }
+    .nav-links { display: flex; align-items: center; gap: 10px; }
+    .nav-link { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: var(--transition); }
+    .nav-link:hover { color: var(--cyan); }
+    .guest-notice {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .guest-notice p { color: var(--text-muted); font-size: 14px; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 32 32" fill="none">
+            <polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="none" stroke="#00e5ff" stroke-width="1.5"/>
+            <polygon points="16,7 23,11 23,21 16,25 9,21 9,11" fill="#00e5ff" opacity="0.15"/>
+            <text x="16" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#00e5ff" font-family="Rajdhani">FF</text>
+          </svg>
+        </div>
+        <span class="brand-name">FF Diamond<span class="brand-accent">Hub</span></span>
+      </div>
+      <div class="nav-right nav-links">
+        <span class="nav-badge">🇱🇰 LKR</span>
+        <!-- Shown when logged out -->
+        <div id="nav-guest">
+          <a href="auth.html" class="btn-admin">Login / Register</a>
+        </div>
+        <!-- Shown when logged in -->
+        <div id="nav-user" style="display:none;align-items:center;gap:10px">
+          <span class="nav-user-name" id="navUserName"></span>
+          <a href="orders.html" class="nav-link">My Orders</a>
+          <button class="btn-admin" onclick="handleLogout()">Logout</button>
+        </div>
+        <a href="admin.html" id="nav-admin-link" style="display:none">
+          <button class="btn-admin" style="border-color:var(--orange);color:var(--orange)">⚙ Admin</button>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="pulse-dot"></span>
+        Live &amp; Instant Top-Up
+      </div>
+      <h1 class="hero-title">
+        Get More <span class="glow-text">Diamonds.</span><br/>
+        Spend Less.
+      </h1>
+      <p class="hero-sub">
+        Sri Lanka's most affordable Free Fire top-up. Real diamonds, honest prices, instant delivery.
+      </p>
+      <div class="steps-row">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-text">Enter your <strong>Player ID</strong> &amp; pick a package</div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-text">Pay &amp; get <strong>Diamonds</strong> delivered instantly</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDER SECTION -->
+  <section class="order-section" id="order">
+    <div class="container">
+      <h2 class="section-title">Place Your Order</h2>
+      <p class="section-sub">Pick a package below. Price updates automatically.</p>
+
+      <!-- Guest: show login prompt -->
+      <div class="guest-notice" id="guestNotice">
+        <p>Please login or register to place an order.</p>
+        <a href="auth.html" class="btn-confirm" style="display:inline-flex;text-decoration:none;width:auto;padding:12px 32px">
+          Login / Register →
+        </a>
+      </div>
+
+      <!-- Logged in: show order form -->
+      <div class="order-card" id="orderForm" style="display:none">
+
+        <!-- Wallet Balance -->
+        <div class="wallet-bar">
+          <div>
+            <div class="wallet-label">Your Wallet Balance</div>
+            <div class="wallet-amount">LKR <span id="walletBalance">0.00</span></div>
+          </div>
+          <div style="font-size:28px">💎</div>
+        </div>
+
+        <!-- Player ID -->
+        <div class="form-group">
+          <label class="form-label" for="playerID">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Free Fire Player ID
+          </label>
+          <input type="text" id="playerID" class="form-input" placeholder="e.g. 123456789" maxlength="12" inputmode="numeric" oninput="validateID(this)"/>
+          <span class="input-hint" id="idHint">Enter your in-game numeric ID</span>
+        </div>
+
+        <!-- Package Grid -->
+        <div class="form-group">
+          <label class="form-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            Select Package
+          </label>
+          <div class="package-grid" id="packageGrid"></div>
+        </div>
+
+        <!-- Price Display -->
+        <div class="price-display" id="priceDisplay">
+          <div class="price-left">
+            <span class="price-label">Total Amount</span>
+            <span class="price-package-name" id="selectedPackageName">No package selected</span>
+          </div>
+          <div class="price-right">
+            <span class="price-currency">LKR</span>
+            <span class="price-amount" id="priceAmount">—</span>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="form-group">
+          <label class="form-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Payment Method
+          </label>
+          <div class="payment-grid">
+            <div class="payment-card" id="pay-wallet" onclick="selectPayment('wallet')">
+              <div class="payment-icon card-icon">💎</div>
+              <div class="payment-info">
+                <strong>Pay from Wallet</strong>
+                <span>Instant — uses your wallet balance</span>
+              </div>
+              <div class="payment-check" id="check-wallet">✓</div>
+            </div>
+            <div class="payment-card" id="pay-cash" onclick="selectPayment('cash')">
+              <div class="payment-icon cash-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="1"/><circle cx="12" cy="12" r="3"/></svg>
+              </div>
+              <div class="payment-info">
+                <strong>Pay via Cash</strong>
+                <span>School / Hand delivery — pending until admin confirms</span>
+              </div>
+              <div class="payment-check" id="check-cash">✓</div>
+            </div>
+          </div>
+          <div class="cash-note" id="cashNote">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Your order stays <strong>Pending</strong> until you hand over cash. Admin approves and diamonds are sent.
+          </div>
+        </div>
+
+        <!-- Confirm Button -->
+        <button class="btn-confirm" id="confirmBtn" onclick="confirmOrder()">
+          <span class="btn-confirm-text">Confirm Order</span>
+          <span class="btn-confirm-arrow">→</span>
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="why-section">
+    <div class="container">
+      <div class="why-grid">
+        <div class="why-item"><span class="why-icon">⚡</span><strong>Instant Delivery</strong><span>Wallet orders in seconds</span></div>
+        <div class="why-item"><span class="why-icon">💎</span><strong>Best Price in LK</strong><span>Save up to LKR 650</span></div>
+        <div class="why-item"><span class="why-icon">🔒</span><strong>Safe & Trusted</strong><span>No account details needed</span></div>
+        <div class="why-item"><span class="why-icon">🏫</span><strong>School-Friendly</strong><span>Pay cash — no card needed</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-name">FF Diamond<span class="brand-accent">Hub</span></span>
+        <span class="footer-tagline">Fast. Cheap. Trusted.</span>
+      </div>
+      <div class="footer-copy">
+        <span>© 2025 FF Diamond Hub</span>
+        <span class="footer-divider">|</span>
+        <span class="created-by">Created by <strong>Hasith</strong></span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
